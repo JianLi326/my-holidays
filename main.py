@@ -3,18 +3,22 @@ import chinese_calendar
 import holidays
 from icalendar import Calendar, Event
 import os
-import uuid
 
 # ========== Configuration ==========
 YEAR = 2026
 OUTPUT_DIR = "output"
 
-# Categories (Outlook 默认颜色)
-CN_HOLIDAY_CAT = 'Red category'
-CN_WORK_CAT = 'Orange category'
-US_HOLIDAY_CAT = 'Blue category'
+# Categories (Color Mapping)
+CN_HOLIDAY_CAT = 'Red category'    # China Holidays -> Red
+CN_WORK_CAT = 'Orange category'    # China Makeup Workdays -> Orange
+US_HOLIDAY_CAT = 'Blue category'   # US Holidays -> Blue
 
-# 翻译映射 (简单直接，不加 Emoji)
+# Emoji Icons (Safe to use since UID is included)
+HOLIDAY_ICON = "🏝️"  # Island, for holidays
+WORK_ICON = "🧳"     # Luggage, for makeup workdays
+
+# ====== Bilingual Name Mapping (English first, Chinese second) ======
+# China Holidays (Chinese -> English)
 CN_NAME_MAP = {
     "元旦": "New Year's Day",
     "春节": "Spring Festival",
@@ -25,6 +29,7 @@ CN_NAME_MAP = {
     "国庆节": "National Day",
 }
 
+# US Holidays (English -> Chinese)
 US_NAME_MAP = {
     "New Year's Day": "元旦",
     "Martin Luther King Jr. Day": "马丁·路德·金纪念日",
@@ -49,13 +54,13 @@ def generate_ics(events, filename):
     cal.add('version', '2.0')
     cal.add('calscale', 'GREGORIAN')
     
-    # 完全模仿开源项目的头
+    # Standard Publishing Headers
     cal.add('method', 'PUBLISH')
     cal.add('x-wr-calname', filename.split('.')[0])
     cal.add('x-wr-caldesc', 'Auto-generated holidays and makeup workdays.')
     cal.add('class', 'PUBLIC')
 
-    # 添加标准时区
+    # Standard Timezone
     from icalendar import Timezone, TimezoneStandard
     tz = Timezone()
     tz.add('tzid', 'Asia/Shanghai')
@@ -68,16 +73,16 @@ def generate_ics(events, filename):
 
     for event_data in events:
         event = Event()
-        # 严格模仿开源项目：极度精简的标题，没有Emoji，没有长括号！
         event.add('summary', event_data['name'])
         event.add('dtstart', event_data['date'])
         event.add('dtend', event_data['end_date'])
         event.add('dtstamp', datetime.utcnow())
         event.add('transp', 'TRANSPARENT')
+        # Use Categories to ensure colors work correctly
         event.add('categories', event_data['category'])
-        # 描述也保持精简，避免换行符
-        event.add('description', event_data.get('description', ''))
-        # 生成唯一且稳定的 UID！模仿开源项目！
+        # Avoid line breaks to prevent compatibility issues
+        event.add('description', event_data.get('description', '').replace('\n', ' '))
+        # Stable UID (Crucial for Outlook!)
         uid_str = f"{event_data['date']}/{event_data['end_date']}/{filename.split('.')[0]}"
         event.add('uid', uid_str)
         
@@ -131,6 +136,7 @@ except NotImplementedError:
     print(f"Error: chinesecalendar does not support {YEAR} yet. Please upgrade.")
 
 
+# ====== 1. Process US ======
 us_events = []
 us_holidays = holidays.country_holidays('US', years=YEAR)
 for h_date, h_name in us_holidays.items():
@@ -138,44 +144,45 @@ for h_date, h_name in us_holidays.items():
     us_events.append({
         'date': h_date,
         'end_date': h_date + timedelta(days=1),
-        'name': f"[US] {h_name} ({cn_name})",
+        'name': f"{HOLIDAY_ICON} [US] {h_name} ({cn_name})",
         'category': US_HOLIDAY_CAT,
-        'description': f"US Holiday: {h_name}"
+        'description': f"US Holiday: {h_name} ({cn_name})"
     })
 
+
+# ====== 2. Merge and Process China ======
 holiday_ranges = merge_dates(cn_holiday_dates)
 work_ranges = merge_dates(cn_work_dates)
 
 cn_events = []
 
-# 精简标题，模仿开源项目的风格
+# Generate China Holidays
 for start, end in holiday_ranges:
     cn_name = chinese_calendar.get_holiday_detail(start)[1] or "Holiday"
     en_name = CN_NAME_MAP.get(cn_name, cn_name)
     
-    if start == end:
-        title = f"[CN] {en_name} ({cn_name})"
-    else:
-        title = f"[CN] {en_name} ({cn_name})"
+    title = f"{HOLIDAY_ICON} [CN] {en_name} ({cn_name})"
         
     cn_events.append({
         'date': start,
         'end_date': end + timedelta(days=1),
         'name': title,
         'category': CN_HOLIDAY_CAT,
-        'description': f"CN Holiday: {cn_name}"
+        'description': f"CN Holiday: {en_name} ({cn_name})"
     })
 
+# Generate China Makeup Workdays
 for start, end in work_ranges:
-    title = "[CN] Make-up workday"
+    title = f"{WORK_ICON} [CN] Make-up workday (调休补班)"
     cn_events.append({
         'date': start,
         'end_date': end + timedelta(days=1),
         'name': title,
         'category': CN_WORK_CAT,
-        'description': f"CN Makeup workday"
+        'description': "CN Makeup workday (调休补班)"
     })
 
+# ====== 3. Generate Files ======
 print("\n===== Start generating calendar files =====")
 generate_ics(cn_events, f"China_Holidays_{YEAR}.ics")
 generate_ics(us_events, f"US_Holidays_{YEAR}.ics")
