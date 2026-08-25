@@ -8,16 +8,13 @@ import os
 YEAR = 2026
 OUTPUT_DIR = "output"
 
-CN_HOLIDAY_CAT = 'Red category'    # China holidays -> Red
-CN_WORK_CAT = 'Orange category'    # China makeup workdays -> Orange
-US_HOLIDAY_CAT = 'Blue category'   # US holidays -> Blue
+CN_HOLIDAY_CAT = 'Red category'
+CN_WORK_CAT = 'Orange category'
+US_HOLIDAY_CAT = 'Blue category'
 
-# Emoji icons
-HOLIDAY_ICON = "🏝️"  # Island, represents vacation
-WORK_ICON = "🧳"     # Luggage, represents commuting/work
+HOLIDAY_ICON = "🏝️" 
+WORK_ICON = "🧳"    
 
-# ====== Bilingual Name Mapping (English first, Chinese second) ======
-# China holidays (Chinese -> English)
 CN_NAME_MAP = {
     "元旦": "New Year's Day",
     "春节": "Spring Festival",
@@ -28,7 +25,6 @@ CN_NAME_MAP = {
     "国庆节": "National Day",
 }
 
-# US holidays (English -> Chinese)
 US_NAME_MAP = {
     "New Year's Day": "元旦",
     "Martin Luther King Jr. Day": "马丁·路德·金纪念日",
@@ -52,17 +48,37 @@ def generate_ics(events, filename):
     cal.add('prodid', '-//Multi-Country Holiday Calendar//example.com//')
     cal.add('version', '2.0')
     cal.add('calscale', 'GREGORIAN')
+    
+    # === 和开源项目保持一致的关键属性 ===
+    cal.add('method', 'PUBLISH')  # 告诉 Outlook 这是一个公开的日历
     cal.add('x-wr-calname', filename.split('.')[0])
+    cal.add('x-wr-caldesc', 'Auto-generated holidays and makeup workdays.')
+    cal.add('class', 'PUBLIC')
+
+    # === 添加标准时区 (Asia/Shanghai) 解决 Outlook 匹配问题 ===
+    from icalendar import Timezone, TimezoneStandard
+    tz = Timezone()
+    tz.add('tzid', 'Asia/Shanghai')
+    std = TimezoneStandard()
+    std.add('dtstart', datetime(1970, 1, 1))
+    std.add('tzoffsetfrom', timedelta(hours=8))
+    std.add('tzoffsetto', timedelta(hours=8))
+    tz.add_component(std)
+    cal.add_component(tz)
 
     for event_data in events:
         event = Event()
         event.add('summary', event_data['name'])
         event.add('dtstart', event_data['date'])
+        # 关键：End date 必须 +1 天，符合 ICS 标准排除法
         event.add('dtend', event_data['end_date'])
         event.add('dtstamp', datetime.utcnow())
         event.add('transp', 'TRANSPARENT')
         event.add('categories', event_data['category'])
         event.add('description', event_data.get('description', ''))
+        # 关键：稳定的 UID 防止 Outlook 重复添加
+        uid_str = f"{event_data['date']}/{event_data['end_date']}/{filename.split('.')[0]}"
+        event.add('uid', uid_str) 
         cal.add_component(event)
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -96,7 +112,6 @@ print(f"Analyzing holidays and makeup workdays for {YEAR}...")
 cn_holiday_dates = []
 cn_work_dates = []
 
-# ====== 1. Process China ======
 try:
     current_date = date(YEAR, 1, 1)
     end_date = date(YEAR, 12, 31)
@@ -116,11 +131,10 @@ try:
 except NotImplementedError:
     print(f"⚠️ Error: chinesecalendar does not support {YEAR} yet. Please upgrade: pip install -U chinesecalendar")
 
-# ====== 2. Process US ======
+
 us_events = []
 us_holidays = holidays.country_holidays('US', years=YEAR)
 for h_date, h_name in us_holidays.items():
-    # Get Chinese name based on English name
     cn_name = US_NAME_MAP.get(h_name, h_name)
     us_events.append({
         'date': h_date,
@@ -130,16 +144,14 @@ for h_date, h_name in us_holidays.items():
         'description': f"Country: US\nType: Public Holiday\nDate: {h_date}"
     })
 
-# ====== 3. Merge China ranges ======
 holiday_ranges = merge_dates(cn_holiday_dates)
 work_ranges = merge_dates(cn_work_dates)
 
 cn_events = []
 
-# Generate China holidays (🏝️ [CN] English first, Chinese second)
 for start, end in holiday_ranges:
     cn_name = chinese_calendar.get_holiday_detail(start)[1] or "Holiday"
-    en_name = CN_NAME_MAP.get(cn_name, cn_name) # Get English name based on Chinese name
+    en_name = CN_NAME_MAP.get(cn_name, cn_name)
     
     if start == end:
         title = f"{HOLIDAY_ICON} [CN] {en_name} {cn_name}"
@@ -154,7 +166,6 @@ for start, end in holiday_ranges:
         'description': f"Country: China\nType: Statutory Holiday\nRange: {start} to {end}"
     })
 
-# Generate China makeup workdays (🧳 [CN])
 for start, end in work_ranges:
     if start == end:
         title = f"{WORK_ICON} [CN] Make up workday"
@@ -169,11 +180,9 @@ for start, end in work_ranges:
         'description': f"Country: China\nType: Weekend Makeup Workday\nRange: {start} to {end}"
     })
 
-# ====== 4. Generate Files ======
 print("\n===== Start generating calendar files =====")
 generate_ics(cn_events, f"China_Holidays_{YEAR}.ics")
 generate_ics(us_events, f"US_Holidays_{YEAR}.ics")
-
 total_events = cn_events + us_events
 generate_ics(total_events, f"All_Holidays_{YEAR}.ics")
 
@@ -181,4 +190,4 @@ print(f"\n📊 Statistics:")
 print(f"   - China holiday ranges: {len(holiday_ranges)}")
 print(f"   - China makeup workday ranges: {len(work_ranges)}")
 print(f"   - US holidays: {len(us_events)}")
-print(f"\n🎉 Generation complete! Everything is in English first, Chinese second, without the word 'Holiday'!")
+print(f"\n🎉 Generation complete!")
