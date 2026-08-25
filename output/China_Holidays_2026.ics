@@ -1,0 +1,245 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Multi-Country Holiday Calendar//example.com//
+CALSCALE:GREGORIAN
+X-WR-CALNAME:China_Holidays_2026
+BEGIN:VEVENT
+SUMMARY:🇨🇳 中国 New Year's Day [中国 / China / CN]
+DTSTART;VALUE=DATE:20260101
+DTEND;VALUE=DATE:20260101
+DTSTAMP:20260825T035822Z
+CATEGORIES:🇨🇳 中国
+DESCRIPTION:国家/地区: 中国\n搜索关键词: 中国 中国公共假
+ 期 中国 China CN\n原始名称: 🇨🇳 中国 New Year's Day
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:🇨🇳 中国 Chinese New Year (Spring Festival) [中国 / China
+  / CN]
+DTSTART;VALUE=DATE:20260217
+DTEND;VALUE=DATE:20260217
+DTSTAMP:20260825T035822Z
+CATEGORIES:🇨🇳 中国
+DESCRIPTION:国家/地区: 中国\n搜索关键词: 中国 中国公共假
+ 期 中国 China CN\n原始名称: 🇨🇳 中国 Chinese New Year (Sprin
+ g Festival)
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:🇨🇳 中国 Chinese New Year (Spring Festival) [中国 / China
+  / CN]
+DTSTART;VALUE=DATE:20260218
+DTEND;VALUE=DATE:20260218
+DTSTAMP:20260825T035822Z
+CATEGORIES:🇨🇳 中国
+DESCRIPTION:国家/地区: 中国\n搜索关键词: 中国 中国公共假
+ 期 中国 China CN\n原始名称: 🇨🇳 中国 Chinese New Year (Sprin
+ g Festival)
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:🇨🇳 中国 Chinese New Year (Spring Festival) [中国 / China
+  / CN]
+DTSTART;VALUE=DATE:20260219
+DTEND;VALUE=DATE:20260219
+DTSTAMP:20260825T035822Z
+CATEGORIES:🇨🇳 中国
+DESCRIPTION:国家/地区: 中国\n搜索关键词: 中国 中国公共假
+ 期 中国 China CN\n原始名称: 🇨🇳 中国 Chinese New Year (Sprin
+ g Festival)
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:🇨🇳 中国 Chinese New Year's Eve [中国 / China / CN]
+DTSTART;VALUE=DATE:20260216
+DTEND;VALUE=DATE:20260216
+DTSTAMP:20260825T035822Z
+CATEGORIES:🇨🇳 中国
+DESCRIPTION:国家/地区: 中国\n搜索关键词: 中国 中国公共假
+ 期 中国 China CN\n原始名称: 🇨🇳 中国 Chinese New Year's Eve
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:🇨🇳 中国 Labor Day [中国 / China / CN]
+DTSTART;VALUE=DATE:20260501
+DTEND;VALUE=DATE:20260501
+DTSTAMP:20260825T035822Z
+CATEGORIES:🇨🇳 中国
+DESCRIPTION:国家/地区: 中国\n搜索关键词: 中国 中国公共假
+ 期 中国 China CN\n原始名称: 🇨🇳 中国 Labor Day
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:🇨🇳 中国 Labor Day [中国 / China / CN]
+DTSTART;VALUE=DATE:20260502
+DTEND;VALUE=DATE:20260502
+DTSTAMP:20260825T035822Z
+CATEGORIES:🇨🇳 中国
+DESCRIPTION:国家/地区: 中国\n搜索关键词: 中国 中国公共假
+ 期 中国 China CN\n原始名称: 🇨🇳 中国 Labor Day
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:🇨🇳 中国 National Day [中国 / China / CN]
+DTSTART;VALUE=DATE:20261001
+DTEND;VALUE=DATE:20261001
+DTSTAMP:20260825T035822Z
+CATEGORIES:🇨🇳 中国
+DESCRIPTION:国家/地区: 中国\n搜索关键词: 中国 中国公共假
+ 期 中国 China CN\n原始名称: 🇨🇳 中国 National Day
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:🇨🇳 中国 National Day [中国 / China / CN]
+DTSTART;VALUE=DATE:20261002
+DTEND;VALUE=DATE:20261002
+DTSTAMP:20260825T035822Z
+CATEGORIES:🇨🇳 中国
+DESCRIPTION:国家/地区: 中国\n搜索关键词: 中国 中国公共假
+ 期 中国 China CN\n原始名称: 🇨🇳 中国 National Day
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:🇨🇳 中国 National Day [中国 / China / CN]
+DTSTART;VALUE=DATE:20261003
+DTEND;VALUE=DATE:20261003
+DTSTAMP:20260825T035822Z
+CATEGORIES:🇨🇳 中国
+DESCRIPTION:国家/地区: 中国\n搜索关键词: 中国 中国公共假
+ 期 中国 China CN\n原始名称: 🇨🇳 中国 National Day
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:🇨🇳 中国 Tomb-Sweeping Day [中国 / China / CN]
+DTSTART;VALUE=DATE:20260405
+DTEND;VALUE=DATE:20260405
+DTSTAMP:20260825T035822Z
+CATEGORIES:🇨🇳 中国
+DESCRIPTION:国家/地区: 中国\n搜索关键词: 中国 中国公共假
+ 期 中国 China CN\n原始名称: 🇨🇳 中国 Tomb-Sweeping Day
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:🇨🇳 中国 Dragon Boat Festival [中国 / China / CN]
+DTSTART;VALUE=DATE:20260619
+DTEND;VALUE=DATE:20260619
+DTSTAMP:20260825T035822Z
+CATEGORIES:🇨🇳 中国
+DESCRIPTION:国家/地区: 中国\n搜索关键词: 中国 中国公共假
+ 期 中国 China CN\n原始名称: 🇨🇳 中国 Dragon Boat Festival
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:🇨🇳 中国 Mid-Autumn Festival [中国 / China / CN]
+DTSTART;VALUE=DATE:20260925
+DTEND;VALUE=DATE:20260925
+DTSTAMP:20260825T035822Z
+CATEGORIES:🇨🇳 中国
+DESCRIPTION:国家/地区: 中国\n搜索关键词: 中国 中国公共假
+ 期 中国 China CN\n原始名称: 🇨🇳 中国 Mid-Autumn Festival
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:🇨🇳 中国 Tomb-Sweeping Day (observed) [中国 / China / CN]
+DTSTART;VALUE=DATE:20260406
+DTEND;VALUE=DATE:20260406
+DTSTAMP:20260825T035822Z
+CATEGORIES:🇨🇳 中国
+DESCRIPTION:国家/地区: 中国\n搜索关键词: 中国 中国公共假
+ 期 中国 China CN\n原始名称: 🇨🇳 中国 Tomb-Sweeping Day (obse
+ rved)
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:🇨🇳 中国 Labor Day (observed) [中国 / China / CN]
+DTSTART;VALUE=DATE:20260504
+DTEND;VALUE=DATE:20260504
+DTSTAMP:20260825T035822Z
+CATEGORIES:🇨🇳 中国
+DESCRIPTION:国家/地区: 中国\n搜索关键词: 中国 中国公共假
+ 期 中国 China CN\n原始名称: 🇨🇳 中国 Labor Day (observed)
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:🇨🇳 中国 National Day (observed) [中国 / China / CN]
+DTSTART;VALUE=DATE:20261005
+DTEND;VALUE=DATE:20261005
+DTSTAMP:20260825T035822Z
+CATEGORIES:🇨🇳 中国
+DESCRIPTION:国家/地区: 中国\n搜索关键词: 中国 中国公共假
+ 期 中国 China CN\n原始名称: 🇨🇳 中国 National Day (observed)
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:🇨🇳 中国 Day off (substituted from 01/04/2026) [中国 / Ch
+ ina / CN]
+DTSTART;VALUE=DATE:20260102
+DTEND;VALUE=DATE:20260102
+DTSTAMP:20260825T035822Z
+CATEGORIES:🇨🇳 中国
+DESCRIPTION:国家/地区: 中国\n搜索关键词: 中国 中国公共假
+ 期 中国 China CN\n原始名称: 🇨🇳 中国 Day off (substituted fr
+ om 01/04/2026)
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:🇨🇳 中国 Day off (substituted from 02/14/2026) [中国 / Ch
+ ina / CN]
+DTSTART;VALUE=DATE:20260220
+DTEND;VALUE=DATE:20260220
+DTSTAMP:20260825T035822Z
+CATEGORIES:🇨🇳 中国
+DESCRIPTION:国家/地区: 中国\n搜索关键词: 中国 中国公共假
+ 期 中国 China CN\n原始名称: 🇨🇳 中国 Day off (substituted fr
+ om 02/14/2026)
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:🇨🇳 中国 Day off (substituted from 02/28/2026) [中国 / Ch
+ ina / CN]
+DTSTART;VALUE=DATE:20260223
+DTEND;VALUE=DATE:20260223
+DTSTAMP:20260825T035822Z
+CATEGORIES:🇨🇳 中国
+DESCRIPTION:国家/地区: 中国\n搜索关键词: 中国 中国公共假
+ 期 中国 China CN\n原始名称: 🇨🇳 中国 Day off (substituted fr
+ om 02/28/2026)
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:🇨🇳 中国 Day off (substituted from 05/09/2026) [中国 / Ch
+ ina / CN]
+DTSTART;VALUE=DATE:20260505
+DTEND;VALUE=DATE:20260505
+DTSTAMP:20260825T035822Z
+CATEGORIES:🇨🇳 中国
+DESCRIPTION:国家/地区: 中国\n搜索关键词: 中国 中国公共假
+ 期 中国 China CN\n原始名称: 🇨🇳 中国 Day off (substituted fr
+ om 05/09/2026)
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:🇨🇳 中国 Day off (substituted from 09/20/2026) [中国 / Ch
+ ina / CN]
+DTSTART;VALUE=DATE:20261006
+DTEND;VALUE=DATE:20261006
+DTSTAMP:20260825T035822Z
+CATEGORIES:🇨🇳 中国
+DESCRIPTION:国家/地区: 中国\n搜索关键词: 中国 中国公共假
+ 期 中国 China CN\n原始名称: 🇨🇳 中国 Day off (substituted fr
+ om 09/20/2026)
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:🇨🇳 中国 Day off (substituted from 10/10/2026) [中国 / Ch
+ ina / CN]
+DTSTART;VALUE=DATE:20261007
+DTEND;VALUE=DATE:20261007
+DTSTAMP:20260825T035822Z
+CATEGORIES:🇨🇳 中国
+DESCRIPTION:国家/地区: 中国\n搜索关键词: 中国 中国公共假
+ 期 中国 China CN\n原始名称: 🇨🇳 中国 Day off (substituted fr
+ om 10/10/2026)
+TRANSP:TRANSPARENT
+END:VEVENT
+END:VCALENDAR
