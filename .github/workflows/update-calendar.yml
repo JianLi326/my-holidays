@@ -2,12 +2,11 @@ name: Update Holiday Calendar
 
 on:
   schedule:
-    # Runs every year on Jan 1st at 00:00 UTC (08:00 Beijing time)
     - cron: "0 0 1 1 *"
-  workflow_dispatch: # Allows manual trigger for testing
+  workflow_dispatch:
 
 permissions:
-  contents: write # Grants permission to commit back to the repo
+  contents: write
 
 jobs:
   build:
@@ -27,16 +26,17 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run script
-        run: python main.py
+        run: python main.py  # 如果你的脚本叫 generate_holidays.py，就改成这个
 
       - name: Commit changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout main
           git add output/
           if git diff --staged --quiet; then
             echo "No changes to commit."
           else
             git commit -m "Update calendar [skip ci]"
-            git push
+            git push origin main
           fi
