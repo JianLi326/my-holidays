@@ -5,7 +5,6 @@ from icalendar import Calendar, Event
 import os
 
 # ========== Configuration ==========
-# Dynamic Year Logic (Get current or next year)
 current_date_now = datetime.now()
 if current_date_now.month >= 11:
     YEAR = current_date_now.year + 1
@@ -14,28 +13,55 @@ else:
 
 OUTPUT_DIR = "output"
 
-# Categories (Color Mapping)
-CN_HOLIDAY_CAT = 'Red category'    # China Holidays -> Red
-CN_WORK_CAT = 'Orange category'    # China Makeup Workdays -> Orange
-US_HOLIDAY_CAT = 'Blue category'   # US Holidays -> Blue
+CN_HOLIDAY_CAT = 'Red category'
+CN_WORK_CAT = 'Orange category'
+US_HOLIDAY_CAT = 'Blue category'
+COMPANY_HOLIDAY_CAT = 'Green category'
 
-# Emoji Icons
-HOLIDAY_ICON = "🏝️"  # Island, for holidays
-WORK_ICON = "🧳"     # Luggage, for makeup workdays
+HOLIDAY_ICON = "🏝️"
+WORK_ICON = "🧳"
+COMPANY_ICON = "🎉"
+
+# ====== Custom Holidays / Events (Mix of Company & US Extra) ======
+def get_day_after_thanksgiving(year):
+    d = date(year, 11, 1)
+    while d.weekday() != 3:  # 3 = Thursday
+        d += timedelta(days=1)
+    d += timedelta(weeks=3)
+    return d + timedelta(days=1)
+
+# Set 'is_us' to True for US holidays (uses blue color, joins US file), False for Company (uses green color)
+COMPANY_HOLIDAYS = [
+    {"date": get_day_after_thanksgiving(YEAR), "name": "Day After Thanksgiving", "is_us": True},
+    # {"date": date(2026, 4, 30), "name": "公司成立纪念日", "is_us": False},
+]
 
 # ====== Bilingual Name Mapping ======
-# China Holidays (English -> Chinese, because chinese_calendar returns English)
 CN_NAME_MAP = {
     "New Year's Day": "元旦",
     "Spring Festival": "春节",
+    "Chinese New Year": "春节",
     "Qingming Festival": "清明节",
+    "Tomb-sweeping Day": "清明节",
+    "Tomb-Sweeping Day": "清明节",
     "Labour Day": "劳动节",
+    "Labor Day": "劳动节",
     "Dragon Boat Festival": "端午节",
     "Mid-Autumn Festival": "中秋节",
+    "Mid-autumn Festival": "中秋节",
+    "Mid-Autumn": "中秋节",
     "National Day": "国庆节",
 }
 
-# US Holidays (English -> Chinese)
+def normalize_name(name):
+    if not name:
+        return name
+    lowered = name.lower()
+    for key in CN_NAME_MAP:
+        if key.lower() == lowered:
+            return key
+    return name
+
 US_NAME_MAP = {
     "New Year's Day": "元旦",
     "Martin Luther King Jr. Day": "马丁·路德·金纪念日",
@@ -48,6 +74,7 @@ US_NAME_MAP = {
     "Veterans Day": "退伍军人节",
     "Thanksgiving Day": "感恩节",
     "Christmas Day": "圣诞节",
+    "Day After Thanksgiving": "感恩节次日",
 }
 
 def generate_ics(events, filename):
@@ -62,10 +89,9 @@ def generate_ics(events, filename):
     
     cal.add('method', 'PUBLISH')
     cal.add('x-wr-calname', filename.split('.')[0])
-    cal.add('x-wr-caldesc', 'Auto-generated holidays and makeup workdays.')
+    cal.add('x-wr-caldesc', 'Auto-generated holidays, makeup workdays, and company events.')
     cal.add('class', 'PUBLIC')
 
-    # Standard Timezone
     from icalendar import Timezone, TimezoneStandard
     tz = Timezone()
     tz.add('tzid', 'Asia/Shanghai')
@@ -85,11 +111,8 @@ def generate_ics(events, filename):
         event.add('transp', 'TRANSPARENT')
         event.add('categories', event_data['category'])
         event.add('description', event_data.get('description', '').replace('\n', ' '))
-        
-        # Stable UID to prevent duplicates (Uses date range)
         uid_str = f"{event_data['date']}/{event_data['end_date']}/{filename.split('.')[0]}"
         event.add('uid', uid_str)
-        
         cal.add_component(event)
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -162,9 +185,8 @@ cn_events = []
 
 # Generate China Holidays
 for start, end in holiday_ranges:
-    # chinese_calendar returns English names like "Dragon Boat Festival"
-    en_name = chinese_calendar.get_holiday_detail(start)[1] or "Holiday"
-    # Look up Chinese name using English name as key
+    raw_name = chinese_calendar.get_holiday_detail(start)[1] or "Holiday"
+    en_name = normalize_name(raw_name)
     cn_name = CN_NAME_MAP.get(en_name, "")
     
     if cn_name:
@@ -191,15 +213,43 @@ for start, end in work_ranges:
         'description': "CN Makeup workday (调休补班)"
     })
 
-# ====== 3. Generate Files ======
+
+# ====== 3. Process Custom Holidays (Company + US Extra) ======
+company_events = []
+for item in COMPANY_HOLIDAYS:
+    if item['date'].year == YEAR:
+        # 判定：如果是 is_us=True，则用 US 的蓝色和 🏝️ 图标，并加入 US 日历
+        if item.get('is_us', False):
+            us_events.append({
+                'date': item['date'],
+                'end_date': item['date'] + timedelta(days=1),
+                'name': f"{HOLIDAY_ICON} [US] {item['name']} ({US_NAME_MAP.get(item['name'], item['name'])})",
+                'category': US_HOLIDAY_CAT,
+                'description': f"US Holiday: {item['name']}"
+            })
+        # 如果不是 US，则是普通公司节日，用绿色和 🎉 图标
+        else:
+            company_events.append({
+                'date': item['date'],
+                'end_date': item['date'] + timedelta(days=1),
+                'name': f"{COMPANY_ICON} [Company] {item['name']}",
+                'category': COMPANY_HOLIDAY_CAT,
+                'description': f"Company Event"
+            })
+
+
+# ====== 4. Generate Files ======
 print("\n===== Start generating calendar files =====")
 generate_ics(cn_events, f"China_Holidays_{YEAR}.ics")
 generate_ics(us_events, f"US_Holidays_{YEAR}.ics")
-total_events = cn_events + us_events
+generate_ics(company_events, f"Company_Holidays_{YEAR}.ics")
+
+total_events = cn_events + us_events + company_events
 generate_ics(total_events, f"All_Holidays_{YEAR}.ics")
 
 print(f"\nStatistics:")
 print(f"   - China holiday ranges: {len(holiday_ranges)}")
 print(f"   - China makeup workday ranges: {len(work_ranges)}")
 print(f"   - US holidays: {len(us_events)}")
+print(f"   - Company events: {len(company_events)}")
 print(f"\nGeneration complete!")
