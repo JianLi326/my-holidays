@@ -5,9 +5,7 @@ from icalendar import Calendar, Event
 import os
 
 # ========== Configuration ==========
-# Dynamic Year Logic: 
-# If it's November or December, generate next year's calendar. 
-# Otherwise, generate the current year's calendar.
+# Dynamic Year Logic (Get current or next year)
 current_date_now = datetime.now()
 if current_date_now.month >= 11:
     YEAR = current_date_now.year + 1
@@ -21,20 +19,20 @@ CN_HOLIDAY_CAT = 'Red category'    # China Holidays -> Red
 CN_WORK_CAT = 'Orange category'    # China Makeup Workdays -> Orange
 US_HOLIDAY_CAT = 'Blue category'   # US Holidays -> Blue
 
-# Emoji Icons (Safe to use since UID is included)
+# Emoji Icons
 HOLIDAY_ICON = "🏝️"  # Island, for holidays
 WORK_ICON = "🧳"     # Luggage, for makeup workdays
 
-# ====== Bilingual Name Mapping (English first, Chinese second) ======
-# China Holidays (Chinese -> English)
+# ====== Bilingual Name Mapping ======
+# China Holidays (English -> Chinese, because chinese_calendar returns English)
 CN_NAME_MAP = {
-    "元旦": "New Year's Day",
-    "春节": "Spring Festival",
-    "清明节": "Qingming Festival",
-    "劳动节": "Labour Day",
-    "端午节": "Dragon Boat Festival",
-    "中秋节": "Mid-Autumn Festival",
-    "国庆节": "National Day",
+    "New Year's Day": "元旦",
+    "Spring Festival": "春节",
+    "Qingming Festival": "清明节",
+    "Labour Day": "劳动节",
+    "Dragon Boat Festival": "端午节",
+    "Mid-Autumn Festival": "中秋节",
+    "National Day": "国庆节",
 }
 
 # US Holidays (English -> Chinese)
@@ -62,7 +60,6 @@ def generate_ics(events, filename):
     cal.add('version', '2.0')
     cal.add('calscale', 'GREGORIAN')
     
-    # Standard Publishing Headers
     cal.add('method', 'PUBLISH')
     cal.add('x-wr-calname', filename.split('.')[0])
     cal.add('x-wr-caldesc', 'Auto-generated holidays and makeup workdays.')
@@ -88,6 +85,8 @@ def generate_ics(events, filename):
         event.add('transp', 'TRANSPARENT')
         event.add('categories', event_data['category'])
         event.add('description', event_data.get('description', '').replace('\n', ' '))
+        
+        # Stable UID to prevent duplicates (Uses date range)
         uid_str = f"{event_data['date']}/{event_data['end_date']}/{filename.split('.')[0]}"
         event.add('uid', uid_str)
         
@@ -163,10 +162,15 @@ cn_events = []
 
 # Generate China Holidays
 for start, end in holiday_ranges:
-    cn_name = chinese_calendar.get_holiday_detail(start)[1] or "Holiday"
-    en_name = CN_NAME_MAP.get(cn_name, cn_name)
+    # chinese_calendar returns English names like "Dragon Boat Festival"
+    en_name = chinese_calendar.get_holiday_detail(start)[1] or "Holiday"
+    # Look up Chinese name using English name as key
+    cn_name = CN_NAME_MAP.get(en_name, "")
     
-    title = f"{HOLIDAY_ICON} [CN] {en_name} ({cn_name})"
+    if cn_name:
+        title = f"{HOLIDAY_ICON} [CN] {en_name} ({cn_name})"
+    else:
+        title = f"{HOLIDAY_ICON} [CN] {en_name}"
         
     cn_events.append({
         'date': start,
