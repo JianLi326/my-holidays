@@ -5,7 +5,15 @@ from icalendar import Calendar, Event
 import os
 
 # ========== Configuration ==========
-YEAR = 2026
+# Dynamic Year Logic: 
+# If it's November or December, generate next year's calendar. 
+# Otherwise, generate the current year's calendar.
+current_date_now = datetime.now()
+if current_date_now.month >= 11:
+    YEAR = current_date_now.year + 1
+else:
+    YEAR = current_date_now.year
+
 OUTPUT_DIR = "output"
 
 # Categories (Color Mapping)
@@ -78,11 +86,8 @@ def generate_ics(events, filename):
         event.add('dtend', event_data['end_date'])
         event.add('dtstamp', datetime.utcnow())
         event.add('transp', 'TRANSPARENT')
-        # Use Categories to ensure colors work correctly
         event.add('categories', event_data['category'])
-        # Avoid line breaks to prevent compatibility issues
         event.add('description', event_data.get('description', '').replace('\n', ' '))
-        # Stable UID (Crucial for Outlook!)
         uid_str = f"{event_data['date']}/{event_data['end_date']}/{filename.split('.')[0]}"
         event.add('uid', uid_str)
         
